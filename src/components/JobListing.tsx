@@ -1,3 +1,4 @@
+import { useState } from "react";
 export interface JobListingProps {
     job: {
         type?: string,
@@ -10,6 +11,17 @@ export interface JobListingProps {
 }
 
 const JobListing = ({ job }: JobListingProps) => {
+
+    const [showFullDesc, setShowFullDesc] = useState(false);
+
+    let description = job.description;
+
+    if (!showFullDesc) {
+        description = job.description?.substring(0, 90) + '...';
+    } else {
+        description = job.description;
+    }
+
     return (
         <div className="bg-white rounded-xl shadow-md relative">
             <div className="p-4">
@@ -19,11 +31,15 @@ const JobListing = ({ job }: JobListingProps) => {
                 </div>
 
                 <div className="mb-5">
-                    {job.description}
+                    {description}
                 </div>
 
-                <h3 className="text-indigo-500 mb-2">{job.salary}</h3>
+                <button onClick={() => {
+                    console.log("HIT")
+                    setShowFullDesc(!showFullDesc)
+                }} className="text-indigo-500 mb-5 hover:text-indigo-600">{showFullDesc ? "Less" : "More"}</button>
 
+                <h3 className="text-indigo-500 mb-2">{job.salary}</h3>
                 <div className="border border-gray-100 mb-5"></div>
 
                 <div className="flex flex-col lg:flex-row justify-between mb-4">
