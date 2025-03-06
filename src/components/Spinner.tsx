@@ -13,8 +13,8 @@ const Spinner = ({ loading }: SpinnerProps) => {
         color="purple"
         loading={loading}
         cssOverride={override}
-        height={150}
-        width={150} />
+        height={25}
+        width={25} />
 }
 
 export default Spinner;
