@@ -10,7 +10,7 @@ const override = {
 }
 const Spinner = ({ loading }: SpinnerProps) => {
     return <FadeLoader
-        color="purple"
+        color="grey"
         loading={loading}
         cssOverride={override}
         height={25}
