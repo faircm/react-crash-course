@@ -6,6 +6,13 @@ import NotFoundPage from "./pages/NotFoundPage"
 import JobPage, { jobLoader } from "./pages/JobPage"
 import MainLayout from "./layouts/MainLayout"
 import EditJobPage from "./pages/EditJobPage"
+import axios from 'axios';
+
+const apiCall = () => {
+  axios.get('http://localhost:5000').then((data) => {
+    console.log(data);
+  })
+}
 
 const App = () => {
 
