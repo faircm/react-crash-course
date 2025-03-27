@@ -1,4 +1,5 @@
 import { Route, createBrowserRouter, createRoutesFromElements, RouterProvider } from "react-router-dom"
+import axios from "axios"
 import HomePage from "./pages/HomePage"
 import JobsPage from "./pages/JobsPage"
 import AddJobPage from "./pages/AddJobPage"
@@ -10,32 +11,37 @@ import EditJobPage from "./pages/EditJobPage"
 const App = () => {
 
   const addJob = async (newJob: object) => {
-    const res = await fetch('/api/jobs', {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(newJob)
-    });
-    return;
+    try {
+      const res = await axios.post('/api/jobs',
+        newJob, { headers: { "Content-Type": "application/json" } })
+
+      return res.data;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
   }
 
-  const editJob = async (modJob: any) => {
-    const res = await fetch(`/api/jobs/${modJob.id}`, {
-      method: 'PUT',
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(modJob)
-    });
-    return;
+  const editJob = async (modJob: object) => {
+    try {
+      const res = await axios.put('/api/jobs',
+        modJob, { headers: { "Content-Type": "application/json" } })
+
+      return res.data;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
   }
 
   const deleteJob = async (id: string) => {
-    const res = await fetch(`/api/jobs/${id}`, {
-      method: 'DELETE',
-    })
-    return;
+    try {
+      const res = await axios.delete(`/api/jobs/${id}`)
+      return res.data;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
   }
 
   const router = createBrowserRouter(

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 import JobListing from './JobListing';
 import Spinner from './Spinner';
-
 interface Job {
     id: string,
     type: string,
@@ -23,19 +23,14 @@ const JobListings = ({ isHome = false }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchJobs = async () => {
-            const apiUrl = isHome ? "/api/jobs?_limit=3" : "/api/jobs"
-            try {
-                const res = await fetch(apiUrl);
-                const data = await res.json();
-                setJobs(data);
-            } catch (err) {
-                console.log(err);
-            } finally {
-                setLoading(false);
-            }
-        }
-        fetchJobs();
+        axios({
+            method: 'get',
+            url: '/api/jobs/',
+            responseType: 'json'
+        }).then(response => {
+            setJobs(response.data);
+            setLoading(false);
+        })
     }, [])
 
     return (

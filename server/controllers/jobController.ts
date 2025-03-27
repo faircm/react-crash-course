@@ -32,7 +32,7 @@ export const getJobById = async (req, res) => {
 export const createNewJob = async (req, res) => {
   try {
     const db = await openDB();
-    const newJob = await db.all(
+    const newJob = await db.run(
       `INSERT INTO job 
       VALUES (NULL,
       '${req.body.title}',
@@ -46,10 +46,10 @@ export const createNewJob = async (req, res) => {
       '${req.body.contactPhone}')`
     );
 
-    console.log(newJob);
-
-    if (newJob) {
-      res.status(200).json(newJob);
+    if (newJob.changes >= 1) {
+      res.status(200).json("New job created");
+    } else {
+      res.status(500).json("Unable to create new job.");
     }
   } catch (err) {
     res.status(500).json(err);
@@ -59,23 +59,25 @@ export const createNewJob = async (req, res) => {
 export const updateJob = async (req, res) => {
   try {
     const db = await openDB();
-    const updatedJob = await db.all(
+    const updatedJob = await db.run(
       `UPDATE job
-      SET 
-      title = ${req.body.title},
-      type = ${req.body.type},
-      location = ${req.body.location},
-      description = ${req.body.description},
-      salary = ${req.body.salary},
-      companyName = ${req.body.companyName},
-      companyDescription = ${req.body.companyDescription},
-      contactEmail = ${req.body.contactEmail},
+      SET
+      title = '${req.body.title}',
+      type = '${req.body.type}',
+      location = '${req.body.location}',
+      description = '${req.body.description}',
+      salary = '${req.body.salary}',
+      companyName = '${req.body.companyName}',
+      companyDescription = '${req.body.companyDescription}',
+      contactEmail = '${req.body.contactEmail}',
       contactPhone = '${req.body.contactPhone}'
       WHERE id = ${req.body.id}`
     );
 
-    if (updatedJob) {
-      res.status(200).json(updatedJob);
+    if (updatedJob.changes >= 1) {
+      res.status(200).json("Job updated");
+    } else {
+      res.status(500).json("Unable to update job, verify that ID exists.");
     }
   } catch (err) {
     res.status(500).json(err);
@@ -85,12 +87,14 @@ export const updateJob = async (req, res) => {
 export const deleteJob = async (req, res) => {
   try {
     const db = await openDB();
-    const deletedJob = await db.all(
+    const deletedJob = await db.run(
       `DELETE from job WHERE id = ${req.params.id};`
     );
 
-    if (deletedJob) {
-      res.status(200).json(deletedJob);
+    if (deletedJob.changes >= 1) {
+      res.status(200).json("Job deleted");
+    } else {
+      res.status(500).json("Unable to delete job, verify that ID exists.");
     }
   } catch (err) {
     res.status(500).json(err);
