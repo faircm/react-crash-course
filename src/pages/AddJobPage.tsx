@@ -64,7 +64,7 @@ const AddJobPage = ({ addJobSubmit }) => {
                     </div>
 
                     <div className="mb-4">
-                        <label className="block text-gray-700 font-bold mb-2"
+                        <label htmlFor="title" className="block text-gray-700 font-bold mb-2"
                         >Job Listing Name</label>
                         <input
                             type="text"
@@ -119,7 +119,7 @@ const AddJobPage = ({ addJobSubmit }) => {
                     </div>
 
                     <div className='mb-4'>
-                        <label className='block text-gray-700 font-bold mb-2'>
+                        <label htmlFor="location" className='block text-gray-700 font-bold mb-2'>
                             Location
                         </label>
                         <input
