@@ -10,10 +10,10 @@ const EditJobPage = ({ editJobSubmit }) => {
     const [location, setLocation] = useState(job.location);
     const [description, setDescription] = useState(job.description);
     const [salary, setSalary] = useState(job.salary);
-    const [companyName, setCompanyName] = useState(job.company.name);
-    const [companyDescription, setCompanyDescription] = useState(job.company.description);
-    const [contactEmail, setContactEmail] = useState(job.company.contactEmail);
-    const [contactPhone, setContactPhone] = useState(job.company.contactPhone);
+    const [companyName, setCompanyName] = useState(job.companyName);
+    const [companyDescription, setCompanyDescription] = useState(job.companyDescription);
+    const [contactEmail, setContactEmail] = useState(job.contactEmail);
+    const [contactPhone, setContactPhone] = useState(job.contactPhone);
 
     const navigate = useNavigate();
     const { id } = useParams();
@@ -28,12 +28,11 @@ const EditJobPage = ({ editJobSubmit }) => {
             location,
             description,
             salary,
-            company: {
-                name: companyName,
-                description: companyDescription,
-                contactEmail,
-                contactPhone
-            }
+            companyName,
+            companyDescription,
+            contactEmail,
+            contactPhone
+
         }
         editJobSubmit(modJob);
         toast.success("Job edited!")

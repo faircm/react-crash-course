@@ -1,12 +1,42 @@
+import { useState, useEffect } from "react";
 import { FaArrowLeft, FaMapMarker } from "react-icons/fa";
-import { useParams, useLoaderData, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import Spinner from "../components/Spinner";
+
+interface Job {
+    id: string,
+    type: string,
+    title: string,
+    description: string,
+    location: string,
+    salary: string,
+    companyName: string,
+    companyDescription: string,
+    contactEmail: string,
+    contactPhone: string,
+}
 
 const JobPage = ({ deleteJob }: any) => {
+
     const navigate = useNavigate();
     const { id } = useParams();
-    const job = useLoaderData();
+
+    const [job, setJob] = useState<Job>();
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        axios({
+            method: 'get',
+            url: `/api/jobs/${id}`,
+            responseType: 'json'
+        }).then(response => {
+            setJob(response.data[0]);
+            setLoading(false);
+        })
+    }, [id])
 
     const onDeleteClick = (jobId: string) => {
         const confirm = window.confirm("Delete this job?")
@@ -30,7 +60,7 @@ const JobPage = ({ deleteJob }: any) => {
             </div>
         </section>
 
-        <section className="bg-indigo-50">
+        {loading ? (<Spinner loading={loading} />) : (<section className="bg-indigo-50">
             <div className="container m-auto py-10 px-6">
                 <div className="grid grid-cols-1 md:grid-cols-70/30 w-full gap-6">
                     <main>
@@ -68,10 +98,10 @@ const JobPage = ({ deleteJob }: any) => {
                         <div className="bg-white p-6 rounded-lg shadow-md">
                             <h3 className="text-xl font-bold mb-6">Company Info</h3>
 
-                            <h2 className="text-2xl">{job.company.name}</h2>
+                            <h2 className="text-2xl">{job.companyName}</h2>
 
                             <p className="my-2">
-                                {job.company.description}
+                                {job.companyDescription}
                             </p>
 
                             <hr className="my-4" />
@@ -79,12 +109,12 @@ const JobPage = ({ deleteJob }: any) => {
                             <h3 className="text-xl">Contact Email:</h3>
 
                             <p className="my-2 bg-indigo-100 p-2 font-bold">
-                                {job.company.contactEmail}
+                                {job.contactEmail}
                             </p>
 
                             <h3 className="text-xl">Contact Phone:</h3>
 
-                            <p className="my-2 bg-indigo-100 p-2 font-bold">{job.company.contactPhone}</p>
+                            <p className="my-2 bg-indigo-100 p-2 font-bold">{job.contactPhone}</p>
                         </div>
 
                         <div className="bg-white p-6 rounded-lg shadow-md mt-6">
@@ -103,12 +133,13 @@ const JobPage = ({ deleteJob }: any) => {
                     </aside>
                 </div>
             </div >
-        </section ></>)
+        </section >)}
+    </>)
 }
 
 const jobLoader = async ({ params }: any) => {
-    const res = await fetch(`/api/jobs/${params.id}`)
-    const data = await res.json();
+    const res = await axios.get(`/api/jobs/${params.id}`)
+    const data = res.data[0];
     return data;
 }
 export { JobPage as default, jobLoader }
